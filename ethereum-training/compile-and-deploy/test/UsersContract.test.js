@@ -66,28 +66,29 @@ describe('The UsersContrac', async () => {
     });
 
 
-
-    it('The user should not be returned if it does not exist', async () => {
+    it('should not allow retrieving a not registered user', async () => {
 
         try {
-            await usersContract.methods.getUser(account[0]).call();
-            assert.fail("You can check another user")
-        } catch (e) {
+            await usersContract.methods.getUser(accounts[0]).call();
+            assert.fail('user should not be registered');
+        }
+        catch (e) {
             if (e instanceof AssertionError) {
-                assert.fail(e.message)
+                assert.fail(e.message);
             }
         }
-
     });
 
+    it('should retrieve total registered users', async () => {
 
-    it('Check size user is correct', async () => {
+        await usersContract.methods.join("Ana", "Gomez")
+            .send({ from: accounts[0], gas: '500000' });
 
-        await usersContract.methods.join("Pedro", "Lopez")
-            .send({ from: accounts[1], gas: '500000' })
-            let size = await usersContract.methods.totalUsers().call()
-            assert.ok(size == 1)
+        await usersContract.methods.join("Mario", "Bros")
+            .send({ from: accounts[1], gas: '500000' });
+
+        let total = await usersContract.methods.totalUsers().call();        
+        assert.equal(total, 2);        
     });
-
 
 });
