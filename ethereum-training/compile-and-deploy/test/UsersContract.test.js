@@ -69,11 +69,8 @@ describe('The UsersContrac', async () => {
 
     it('The user should not be returned if it does not exist', async () => {
 
-        await usersContract.methods.join("Pedro", "Lopez")
-            .send({ from: accounts[1], gas: '500000' })
-
         try {
-            await usersContract.methods.getUser(account[2]).call();
+            await usersContract.methods.getUser(account[0]).call();
             assert.fail("You can check another user")
         } catch (e) {
             if (e instanceof AssertionError) {
@@ -84,13 +81,12 @@ describe('The UsersContrac', async () => {
     });
 
 
-
     it('Check size user is correct', async () => {
 
         await usersContract.methods.join("Pedro", "Lopez")
             .send({ from: accounts[1], gas: '500000' })
             let size = await usersContract.methods.totalUsers().call()
-            assert.ok(size == 10)
+            assert.ok(size == 1)
     });
 
 
